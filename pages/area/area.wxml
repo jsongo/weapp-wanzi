@@ -1,0 +1,6 @@
+
+<view class="wrapper">
+    <view class="top">
+        <image class="banner" src="{{base.img}}"></image>
+    </view>
+</view>

@@ -1,0 +1,15 @@
+{
+  "pages":[
+      "pages/search/search",
+      "pages/splash/splash",
+      "pages/country/country",
+      "pages/area/area",
+      "pages/index/index"
+  ],
+  "window":{
+      "backgroundTextStyle":"light",
+      "navigationBarBackgroundColor": "rgba(113, 178, 190, 1)",
+      "navigationBarTitleText": "",
+      "navigationBarTextStyle":"white"
+  }
+}

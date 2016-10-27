@@ -1,0 +1,6 @@
+.wrapper {
+    height: 100%;
+}
+view, input, image, text {
+    box-sizing: border-box;
+}
