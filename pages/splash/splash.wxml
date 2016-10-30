@@ -1,7 +1,7 @@
 <view class="wrapper">
     <swiper class="playing" style="height: {{winH}}px;" bindchange="swiperChange"
         indicator-dots="{{splashes.length>1?true:false}}" autoplay="{{false}}">
-        <block wx:for="{{splashes}}">
+        <block wx:for="{{splashes}}" wx:key="*this">
             <swiper-item>
                 <view class="inner-wrapper">
                     <image src="{{item}}" class="slide-image"

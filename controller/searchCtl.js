@@ -28,12 +28,33 @@ module.exports = {
             });
         });
     },
-    renderDetailTop: function(countryId) {
+    renderDetailTop: function(countryId, areaId, callback) {
         var page = app.getPage('area');
         page && this._initData_(null, ()=>{
-            page.setBaseData(
-                this._getDataFromLay1_(this.areas[countryId])
-            );
+            var item = null;
+            var areas = this.areas[countryId]['children'];
+            if (areaId) {
+                for (var k in areas) {
+                    var obj = areas[k];
+                    if (obj.id == areaId) {
+                        item = obj;
+                    }
+                }
+            }
+            else {
+                item = this.areas[countryId];
+            }
+            if (item) {
+                var baseData = this._getDataFromLay1_(item);
+                page.setData({
+                    base: baseData
+                });
+                console.log(baseData);
+                callback && callback.call(null);
+            }
+            else {
+                console.log('area not found.')
+            }
         });
     },
 
@@ -152,6 +173,11 @@ module.exports = {
                 else {
                     // 丢弃
                 }
+            }
+            // 排序
+            for (var k in this.areas) {
+                var places = this.areas[k]['children'];
+                places && util.sortObjs(places, 'pin');
             }
             // 把国家数据存入缓存
             wx.setStorage({

@@ -47,6 +47,13 @@ module.exports = {
         return year + '-' + month + '-' + day 
             + ' ' + hour + ':' + minute + ':' + second;
     },
+    getDate: function(){
+        var date = new Date(),
+            year = date.getFullYear(),
+            month = this._formatNumber_(date.getMonth() + 1),
+            day = this._formatNumber_(date.getDate());
+        return year + '-' + month + '-' + day;
+    },
     urlencode: function(data){
         var result = '';
         for (var key in data) {

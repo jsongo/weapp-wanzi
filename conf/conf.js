@@ -15,7 +15,14 @@ module.exports = {
         countries: 'area/getAreaAll',
         areaDetail: 'service/searchList'
     },
+    storeKeys: {
+        guide: (id)=>{return 'guide#'+id;},
+        area: (id, index=0)=>{return 'area#' + id + '#' + index;},
+        areaCnt: (id)=>{return 'area-cnt#' + id;}
+    },
+    // image prefix
     imgPrefix: 'http://img.wanzi.cc/images/',
     flagImgPrefix: 'http://wanzi.cc/mobile/public/images/Flag/',
     areaImgPrefix: 'http://base.wanzi.cc/static/areas/',
+    guidePrefix: 'https://wanzi-image-alimmdn-com.alikunlun.com/images/',
 };

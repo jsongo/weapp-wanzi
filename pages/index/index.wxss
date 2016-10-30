@@ -1,4 +1,4 @@
-@import "../../wxss/base";
+@import "../../wxss/base.wxss";
 
 .scroll-wrapper {
     height: 100%;

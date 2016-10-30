@@ -4,7 +4,7 @@
         style="height: {{winH}}px;">
         <navigator url="../search/search" class="scroll-view-item">
             <view>
-                <image src="http://wanzi.cc/mobile/public/images/earch-bg.jpg"></image>
+                <image src="http://wanzi.cc/mobile/public/images/earch-bg.jpg" class="item-bg"></image>
             </view>
         </navigator>
         <navigator url="" class="scroll-view-item">
@@ -12,7 +12,7 @@
                 <image src="http://wanzi.cc/mobile/public/images/user_guid.jpg"></image>
             </view>
         </navigator>
-        <navigator wx:for="{{items}}" url="../?index={{item.id}}"  class="scroll-view-item data-item"
+        <navigator wx:for="{{items}}" wx:key="id" url="../?index={{item.id}}"  class="scroll-view-item data-item"
             hover-class="navigator-hover">
             <view>
                 <image src="{{item.img}}@640w_1l_80Q" alt="{{item.desc}}"></image>
