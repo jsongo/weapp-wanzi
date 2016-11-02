@@ -6,7 +6,9 @@ var areaDetailCtl = require('../../controller/areaDetailCtl.js'),
 // 获取应用实例
 var app = getApp();
 var initDateStr = '选择日期',
-    noDemands = '无要求';
+    noDemands = '无要求',
+    today = util.getDate();
+    
 Page({
 
     data: {
@@ -15,7 +17,8 @@ Page({
         items: {},
         guideCnt: 0,
         hasMore: true,
-        today: util.getDate(),
+        today: today,
+        endDateStart: today,
         // date
         startDate: initDateStr,
         endDate: initDateStr,
@@ -36,13 +39,16 @@ Page({
             '七座车接送机',
             '九座车及以上接送机',
         ],
-        walk: 0,
-        car: 0,
-        fly: 0,
+        filters: [0,0,0], // walk, car, fly
         bannerPrefix: conf.areaImgPrefix
     },
     countryId: 0,
     areaId: 0,
+    optsValue: [
+        {1:1},
+        {1:2, 2:5, 3:6},
+        {1:3, 2:4, 3:7, 4:8}
+    ],
 
     onLoad: function(options) {
         app.setPage('area', this);
@@ -63,13 +69,25 @@ Page({
             });
         // 渲染详细列表
         var id = this.areaId || this.countryId;
-        areaDetailCtl.renderList(id);
+        areaDetailCtl.firstRenderList(id);
+    },
+    onReachBottom: function() {
+        if (this.data.hasMore) {
+            areaDetailCtl.renderMore();
+        }
     },
     startDateChanged: function(event) {
-        var value = event.detail.value;
+        var value = event.detail.value,
+            endDate = this.data.endDate;
+        if (endDate === initDateStr) {
+            endDate = value;
+        }
         this.setData({
-            startDate: value
+            startDate: value,
+            endDate: endDate,
+            endDateStart: value
         });
+        this.filterList(); // 不为0时才发请求
     },
     endDateChanged: function(event) {
         var value = event.detail.value;
@@ -78,18 +96,33 @@ Page({
         });
     },
     walkPicked: function(event) {
+        var value = parseInt(event.detail.value);
         this.setData({
-            walk: parseInt(event.detail.value)
+            filters: [value, 0, 0]
         });
+        value && this.filterList(this.optsValue[0][value]); // 不为0时才发请求
     },
     carPicked: function(event) {
+        var value = parseInt(event.detail.value);
         this.setData({
-            car: parseInt(event.detail.value)
+            filters: [0, value, 0]
         });
+        value && this.filterList(this.optsValue[1][value]);
     },
     flyPicked: function(event) {
+        var value = parseInt(event.detail.value);
         this.setData({
-            fly: parseInt(event.detail.value)
+            filters: [0, 0, value]
         });
+        value && this.filterList(this.optsValue[2][value]);
+    },
+    filterList: function(sp) {
+        var opt = {};
+        sp && (opt.sp = sp);
+        if (this.data.startDate != initDateStr) {
+            opt.start = this.data.startDate;
+            opt.end = this.data.endDate;
+        }
+        areaDetailCtl.renderFilter(opt);
     }
 });

@@ -4,3 +4,6 @@
 view, input, image, text {
     box-sizing: border-box;
 }
+image {
+    width: 100%;
+}

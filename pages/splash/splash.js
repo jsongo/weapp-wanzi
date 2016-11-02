@@ -21,29 +21,18 @@ Page({
             }, conf.splashDuration);
         }
         
-        wx.getSystemInfo({
-            success: ( res )=> {
-                this.setData({
-                    winH: res.windowHeight,
-                    splashes: splashes
-                });
-                app.setWinH(res.windowHeight);
-                /*try {
-                    wx.setStorageSync('used', 'yes');
-                }
-                catch (ex) {
-                    console.log(ex);
-                }*/
-                wx.setStorage({
-                    key: 'used',
-                    data: 'yes',
-                    success: function(res) {
-                        console.log('tag stored. ' + res.data);
-                    },
-                    fail: function(err) {
-                        console.log('error ' + err);
-                    }
-                });
+        this.setData({
+            winH: app.getWinH(),
+            splashes: splashes
+        });
+        wx.setStorage({
+            key: 'used',
+            data: 'yes',
+            success: function(res) {
+                console.log('tag stored. ' + res.data);
+            },
+            fail: function(err) {
+                console.log('error ' + err);
             }
         });
     },

@@ -16,7 +16,7 @@
                     <text class="tips">{{startDate}}</text>
                 </view>
             </picker>
-            <picker mode="date" value="{{date}}" start="{{today}}" 
+            <picker mode="date" value="{{date}}" start="{{endDateStart}}" 
                 class="date" bindchange="endDateChanged">
                 <view class="picker">
                     <text>结束</text>
@@ -28,7 +28,8 @@
             <picker bindchange="walkPicked"
                 class="selector" range="{{walkOpts}}">
                 <view class="picker">
-                徒步向导:{{walkOpts[walk]}}
+                    徒步向导:{{walkOpts[filters[0]]}}
+                    <image src="../../res/img/arrow.png" class="right-icon"></image>
                 </view>
             </picker>
         </view>
@@ -36,8 +37,8 @@
             <picker bindchange="carPicked"
                 class="selector" range="{{carOpts}}">
                 <view class="picker">
-                带车向导:{{carOpts[car]}}
-                <image src="../../res/img/arrow.png" class="right-icon"></image>
+                    带车向导:{{carOpts[filters[1]]}}
+                    <image src="../../res/img/arrow.png" class="right-icon"></image>
                 </view>
             </picker>
         </view>
@@ -45,7 +46,8 @@
             <picker bindchange="flyPicked"
                 class="selector" range="{{flyOpts}}">
                 <view class="picker">
-                接送机:{{flyOpts[fly]}}
+                    接送机:{{flyOpts[filters[2]]}}
+                    <image src="../../res/img/arrow.png" class="right-icon"></image>
                 </view>
             </picker>
         </view>

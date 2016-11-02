@@ -54,6 +54,12 @@ module.exports = {
             day = this._formatNumber_(date.getDate());
         return year + '-' + month + '-' + day;
     },
+    formatSecondsSimply: function(seconds) {
+        var date = new Date(seconds*1000),
+            hour = this._formatNumber_(date.getHours()),
+            minute = this._formatNumber_(date.getMinutes());
+        return hour + ':' + minute;
+    },
     urlencode: function(data){
         var result = '';
         for (var key in data) {
@@ -109,4 +115,4 @@ module.exports = {
         }
         return arrObj;
     }
-}
+};

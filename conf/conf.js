@@ -13,7 +13,11 @@ module.exports = {
     api: {
         home: 'content/getChannelContent',
         countries: 'area/getAreaAll',
-        areaDetail: 'service/searchList'
+        areaDetail: 'service/searchList',
+        userDetail: 'service/getInfo/id/',
+        album: 'album/getAlbumList/id/',
+        passport: 'passport/getPassport/id/',
+        points: 'point/getPointList',
     },
     storeKeys: {
         guide: (id)=>{return 'guide#'+id;},
@@ -25,4 +29,9 @@ module.exports = {
     flagImgPrefix: 'http://wanzi.cc/mobile/public/images/Flag/',
     areaImgPrefix: 'http://base.wanzi.cc/static/areas/',
     guidePrefix: 'https://wanzi-image-alimmdn-com.alikunlun.com/images/',
+    refunds: {
+        '1': '灵活',
+        '2': '中等',
+        '3': '严格'
+    },
 };

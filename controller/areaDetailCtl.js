@@ -9,52 +9,60 @@ module.exports = {
     guides: null,
     total: -1, // 列表的长度
     areaId: 0, // maybe a country id or and area id
+    loading: false, 
+    pageNo: 0,
 
-    reqData: function(pageNo, callback){
+    tmpGuides: null, // 查询过滤后的列表
+    tmpTotal: -1, // 查询过滤后的列表长度
+
+    reqData: function(pageNo, callback, opt){
+        pageNo = pageNo || 0;
         var url = conf.apiDomain + conf.api.areaDetail,
             data = {
                 offset: pageNo * this.limit,
                 limit: this.limit,
-                start: '',
-                end: '',
+                start: opt && opt.start || 0,
+                end: opt && opt.end || 0,
+                sp: opt && opt.sp || 0,
                 keyword: this.areaId, 
-                sp: 0,
                 time: util.getTime()
             };
+        this.loading = true;
         net.post({
             url: url,
             data: data,
             success: (data) => {
                 callback && callback.call(this, data);
+            },
+            complete: ()=>{
+                this.loading = false;
             }
         });
     },
-    renderEachItem: function(){
+    renderEachItem: function(arr, cnt){
         var page = app.getPage('area'),
             more = true;
-        if (this.guides.length >= this.total) {
+        arr = arr || this.guides;
+        cnt = cnt || this.total;
+        if (arr.length >= cnt) {
             more = false;
         }
         page.setData({
             hasMore: more,
-            guideCnt: this.total,
-            items: this.guides
+            guideCnt: cnt,
+            items: arr
         });
     },
-    prepareData: function(data){
+    prepareData: function(data, arr){
         var list = data.result;
+        arr = arr || this.guides;
         for (var k in list) {
             var item = list[k];
             item = this.formatItem(item);
             if (item) {
-                this.guides.push(item);
+                arr.push(item);
             }
         }
-        // 存到storage中
-        wx.setStorage({
-            key: conf.storeKeys.area(this.areaId, 0),
-            data: this.guides
-        });
     },
     formatItem: function(item){
         /*if (item.ser_status != '1') { // 过滤status
@@ -72,7 +80,7 @@ module.exports = {
             area: item.area_name
         }
     },
-    checkData: function(callback){
+    checkData: function(){
         // load from the cache
         var key = conf.storeKeys.area(this.areaId); // 0
         this.guides = wx.getStorageSync(key);
@@ -86,21 +94,64 @@ module.exports = {
             return false;
         }
     },
-    renderList: function(areaId) {
-        this.areaId = areaId;
+
+    firstRenderList: function(areaId, callback) { 
+        if (this.loading) {
+            console.error('Another request is proccessing.');
+            return;
+        }
+        if (areaId) {
+            this.areaId = areaId;
+        }
         if(!this.checkData()) {
             this.guides = [];
-            this.reqData(0, (data)=>{
+            this.pageNo = 0;
+            this.reqData(this.pageNo, (data)=>{
                 // 存个数
                 this.total = data.count;
                 wx.setStorageSync(conf.storeKeys.areaCnt(this.areaId), this.total);
 
                 this.prepareData(data); // 格式化数据
+
+                // 存到storage中
+                wx.setStorage({
+                    key: conf.storeKeys.area(this.areaId, 0),
+                    data: this.guides
+                });
+
                 this.renderEachItem();
             });
         }
         else {
             this.renderEachItem();
         }
+        this.pageNo++;
+        callback && callback.call(null);
+    }, 
+    renderMore: function() {
+        if (this.loading) {
+            console.error('Another request is proccessing.');
+            return;
+        }
+        this.reqData(this.pageNo++, (data)=>{
+            this.prepareData(data); // 格式化数据
+            this.renderEachItem();
+        });
+    },
+    // 在详情页中进行查询 
+    renderFilter: function(filtOpt) { 
+        // 调用这个方法的时候，this.areaId已经被设置了 
+        //      如果没设置，说明此时不该调用这个方法 
+        if (!this.areaId) {
+            return ;
+        }
+        this.tmpGuides = [];
+        this.reqData(0, (data)=>{
+            // 存个数 
+            this.tmpTotal = data.count;
+            // 格式化数据 
+            this.prepareData(data, this.tmpGuides);
+            this.renderEachItem(this.tmpGuides, this.tmpTotal);
+        }, filtOpt);
     }
 };
