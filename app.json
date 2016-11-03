@@ -1,8 +1,8 @@
 {
   "pages":[
-      "pages/guide/guide",
       "pages/search/search",
       "pages/splash/splash",
+      "pages/guide/guide",
       "pages/country/country",
       "pages/area/area",
       "pages/index/index"

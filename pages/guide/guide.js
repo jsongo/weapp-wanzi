@@ -15,7 +15,7 @@ Page({
 
     onLoad: function(options) {
         app.setPage('guide', this);
-        this.guideId = '569397a4a624f'; // options.id;
+        this.guideId = options.id; // '569397a4a624f'; // 
 
         // 设置高度
         this.setData({

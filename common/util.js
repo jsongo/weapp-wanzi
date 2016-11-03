@@ -47,8 +47,8 @@ module.exports = {
         return year + '-' + month + '-' + day 
             + ' ' + hour + ':' + minute + ':' + second;
     },
-    getDate: function(){
-        var date = new Date(),
+    getDate: function(d){
+        var date = new Date(d),
             year = date.getFullYear(),
             month = this._formatNumber_(date.getMonth() + 1),
             day = this._formatNumber_(date.getDate());

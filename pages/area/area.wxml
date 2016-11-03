@@ -52,7 +52,7 @@
             </picker>
         </view>
     </view>
-    <view class="guide" wx:for="{{items}}" wx:key="id">
+    <navigator class="guide" wx:for="{{items}}" wx:key="id" url="../guide/guide?id={{item.id}}">
         <block wx:if="{{item.status>0}}">
         <view class="bg-wrap">
             <view class="tag" wx:if="{{item.commentCnt>0}}">
@@ -74,7 +74,7 @@
             </view>
         </view>
         </block>
-    </view>
+    </navigator>
     <view class="loading-img" hidden="{{!hasMore}}">
         <image src="../../res/img/reading2.gif"></image>
     </view>

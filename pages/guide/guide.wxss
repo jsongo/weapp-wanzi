@@ -258,5 +258,82 @@ page {
 }
     /* stats */
 .services .stats {
-    
+    display: flex;
+    padding: 20rpx 10rpx;
+    border-bottom: 1rpx #ccc solid;
+}
+.services .stat {
+    flex: 1;
+    font-size: 28rpx;
+    line-height: 1.5em;
+    padding: 10rpx;
+    border-left: 2rpx #ccc solid;
+    text-align: center;
+}
+.services .stat:first-child {
+    border-left: 0;
+}
+.services .stat text {
+    display: block;
+}
+.services .stat text:first-child {
+    color: #ADA9A8;
+}
+.services .stat text:last-child {
+    color: #89847E;
+}
+
+/* passport */
+.passport {
+    position: relative;
+    margin: 80rpx 0;
+}
+.passport .bg-wrap image:first-child {
+    width: 100%;
+    height: 426rpx;
+}
+.passport .bg-wrap image:last-child {
+    width: 192rpx;
+    height: 148rpx;
+    position: absolute;
+    top: 30rpx;
+    right: 30rpx;
+}
+.passport .cert-desc {
+    position: absolute;
+    top: 110rpx;
+    left: 0;
+    display: flex;
+    color: #fff;
+    line-height: 2em;
+    font-size: 28rpx;
+    width: 100%;
+    padding: 20rpx;
+}
+.passport .cert-desc .sep {
+    width: 10%;
+}
+.passport .cert-desc .user {
+    text-align: center;
+    width: 30%;
+    padding: 20rpx;
+}
+.passport .user .avatar {
+    width: 160rpx;
+    height: 160rpx;
+    display: block;
+    margin: auto;
+}
+.passport .user text {
+    margin-top: 20rpx;
+}
+.passport .cert-desc .info {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+}
+/* bottom finish img */
+.finished {
+    width: 100%;
+    height: 138rpx;
 }

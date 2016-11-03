@@ -32,14 +32,14 @@ module.exports = class Guide {
                     // fetch albums
                     var api2 = conf.api.album + this.uid;
                     return new Promise((resolve, reject)=>{ // 需要一个promise来阻塞下一个then
-                        this._fetchAndRender_(api2, (data2)=>{
-                            this._renderAlbum_(data2.result);
+                        this._fetchAndRender_(api2, (data)=>{
+                            this._renderAlbum_(data.result);
                             resolve();
                         });
                     });
                 })
                 .then(()=>{
-                    var api3 = conf.api.points,
+                    var api2 = conf.api.points,
                         reqData = {
                             offset: 0,
                             limit: 10000,
@@ -48,8 +48,8 @@ module.exports = class Guide {
                             time: util.getTime()
                         };
                     return new Promise((resolve, reject)=>{ // 需要一个promise来阻塞下一个then
-                        this._fetchAndRender_(api3, (data3)=>{
-                            this._renderSpots_(data3);
+                        this._fetchAndRender_(api2, (data)=>{
+                            this._renderSpots_(data);
                             resolve();
                         }, {
                             method: 'post',
@@ -58,6 +58,16 @@ module.exports = class Guide {
                     });
                 })
                 .then(()=>{
+                    // fetch passport
+                    var api2 = conf.api.passport + this.uid;
+                    return new Promise((resolve, reject)=>{ // 需要一个promise来阻塞下一个then
+                        this._fetchAndRender_(api2, (data)=>{
+                            this._renderPassport_(data);
+                            resolve();
+                        });
+                    });
+                })
+                .then(()=>{ // 最后存储
                     // 更新storage
                     wx.setStorage({
                         key: conf.storeKeys.guide(this.uid),
@@ -182,6 +192,41 @@ module.exports = class Guide {
         });
     }
 
+    _renderPassport_(data) {
+        this.guide['passport'] = this._formatPassport_(data);
+        this.page.setData({
+            guide: this.guide
+        });
+    }
+    _formatPassport_(data) {
+        var status = parseInt(data.pa_status||0),
+            statusStr = '',
+            passImg = '';
+        switch (status) {
+            case 0: 
+                statusStr = '未通过';
+                passImg = 'fail';
+                break;
+            case 1:
+                statusStr = '审核中';
+                passImg = 'verify';
+                break;
+            case 2:
+                statusStr = '已通过';
+                passImg = 'pass';
+                break;
+        }
+        return {
+            id: data.pa_id,
+            name: data.pa_name,
+            phone: data.pa_phone,
+            img: data.pa_photo,
+            passImg: passImg,
+            time: util.getDate(parseInt(data.pa_time)*1000),
+            status: statusStr
+        }
+    }
+
     _renderSpots_(data) {
         var newData = [];
         if (!this.spots) {
@@ -189,7 +234,7 @@ module.exports = class Guide {
         }
         var cnt = 3; // 最多三个
         for (var item of data) {
-            if (cnt-- < 0) {
+            if (cnt-- <= 0) {
                 break;
             }
             newData.push({id: item.pt_id, img: item.pt_face});
